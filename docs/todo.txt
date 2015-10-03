@@ -2,6 +2,10 @@ TODO
 
 current tasks:
 
+demo: paint onto UI art
+
+remove start.py aka START_SCRIPT_FILENAME functionality unless it seems uniquely useful for something
+
 fix: opening ladder2 from list after launching into another game crashes.  world.player is None, find out why
 "Couldn't parse class [Player]" error, also clear out classes from previously loaded games
 - if module from previously loaded game has same name as module in new game, old one is still used
