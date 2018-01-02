@@ -198,7 +198,7 @@ class Application:
             self.context_es = False
         self.log('Detecting hardware...')
         # report OS, version, CPU
-        cpu = platform.processor()
+        cpu = platform.processor() or platform.machine()
         self.log('  CPU: %s' % (cpu if cpu != '' else "[couldn't detect CPU]"))
         self.log('  OS: %s' % platform.platform())
         py_version = ' '.join(sys.version.split('\n'))
