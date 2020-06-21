@@ -376,7 +376,7 @@ A GameObject's collision can be static or dynamic. If it's static, it can never 
 </p>
 <h4>Tunneling</h4>
 <p>
-Tunneling refers to bugs where moving objects can punch through other objects without the expected collision behavior. If you notice this happening for a given object class, you can set its <tt>fast_move_steps</tt> property to something greater than 0 to make its collision checks more granular - basically, each move is subdivided into <tt>fast_move_steps</tt> steps, the object stops moving if a collision is found, and the collision resolution phase that happens later will push the colliding object out of what it hit. This is enabled by default for the game_util_objects.Projectile class. Playscii's collision code is still maturing so if you see collision problems you can't easily fix, please <a href="https://bitbucket.org/JPLeBreton/playscii/issues?status=new&status=open">file a bug</a>.
+Tunneling refers to bugs where moving objects can punch through other objects without the expected collision behavior. If you notice this happening for a given object class, you can set its <tt>fast_move_steps</tt> property to something greater than 0 to make its collision checks more granular - basically, each move is subdivided into <tt>fast_move_steps</tt> steps, the object stops moving if a collision is found, and the collision resolution phase that happens later will push the colliding object out of what it hit. This is enabled by default for the game_util_objects.Projectile class. Playscii's collision code is still maturing so if you see collision problems you can't easily fix, please <a href="https://heptapod.host/jp-lebreton/playscii/issues">file a bug</a>.
 </p>
 </div>
 
@@ -429,7 +429,7 @@ An example of how one might use this: select an object in Game Mode, open the co
 <a id="errorhandling"> <h4>Crash/Error Handling</h4> </a>
 <div class="block">
 <p>
-As you're iterating on game code, it's possible your code will cause Playscii to crash. Since 0.8.1, where possible Playscii will try to catch this and print the Python exception information to the console instead of crashing. If you run into a situation where this reasonably should have happened but you got a crash instead, please <a href="https://bitbucket.org/JPLeBreton/playscii/issues?status=new&status=open">file a bug</a>.
+As you're iterating on game code, it's possible your code will cause Playscii to crash. Since 0.8.1, where possible Playscii will try to catch this and print the Python exception information to the console instead of crashing. If you run into a situation where this reasonably should have happened but you got a crash instead, please <a href="https://heptapod.host/jp-lebreton/playscii/issues">file a bug</a>.
 </p>
 </div>
 

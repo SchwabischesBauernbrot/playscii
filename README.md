@@ -4,7 +4,7 @@ Playscii (pronounced play-skee) is an art, animation, and game creation tool.
 The latest version will always be available here:
 
 * [http://jp.itch.io/playscii](http://jp.itch.io/playscii)
-* [https://bitbucket.org/JPLeBreton/playscii](https://bitbucket.org/JPLeBreton/playscii)
+* [https://heptapod.host/jp-lebreton/playscii](https://heptapod.host/jp-lebreton/playscii)
 
 Playscii's main website is here:
 
@@ -25,7 +25,7 @@ The latest version of the HTML documentation resides here:
 
 If you run into any issues with Playscii, please report a bug here:
 
-[https://bitbucket.org/JPLeBreton/playscii/issues?status=new&status=open](https://bitbucket.org/JPLeBreton/playscii/issues?status=new&status=open)
+[https://heptapod.host/jp-lebreton/playscii/issues](https://bitbucket.org/JPLeBreton/playscii/issues?status=new&status=open)
 
 ## Roadmap
 
