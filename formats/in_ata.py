@@ -42,7 +42,7 @@ Imports with ATASCII character set and Atari palette.
             # backspace
             elif char == 126:
                 x -= 1
-                x += 1
+                i += 1
                 continue
             # line break
             elif char == 155:
