@@ -424,6 +424,9 @@ class ConsoleUI(UIElement):
         if log_changed:
             self.clear()
             self.update_log_lines()
+            # if user pressed enter on a blank line, user_input_changed will
+            # be False but we should still update
+            self.update_user_line()
         # update user line independently of log, it changes at a different rate
         if user_input_changed:
             self.update_user_line()
@@ -448,8 +451,10 @@ class ConsoleUI(UIElement):
             self.ui.app.log(line)
             # if command is same as last, don't repeat it
             if len(self.command_history) == 0 or (len(self.command_history) > 0 and self.current_line != self.command_history[-1]):
-                self.command_history.append(self.current_line)
-                self.history_file.write(self.current_line + '\n')
+                # don't add blank lines to history
+                if self.current_line.strip():
+                    self.command_history.append(self.current_line)
+                    self.history_file.write(self.current_line + '\n')
             self.parse(self.current_line)
             self.current_line = ''
             self.history_index = 0
