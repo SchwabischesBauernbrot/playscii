@@ -106,6 +106,9 @@ class Character(GameObject):
         if not self.move_state in self.valid_states:
             self.valid_states.append(self.move_state)
         GameObject.__init__(self, world, obj_data)
+        # assume that character should start idling, if its art animates
+        if self.art.frames > 0:
+            self.start_animating()
     
     def update_state(self):
         GameObject.update_state(self)
