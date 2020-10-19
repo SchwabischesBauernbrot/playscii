@@ -253,6 +253,9 @@ class GameWorld:
         # (keeps unclicks after dialog dismiss from deselecting objects)
         if self.last_click_on_ui:
             self.last_click_on_ui = False
+            # clear drag objects, since we're leaving valid drag context
+            # fixes unwanted drag after eg ESC exiting a menu
+            self.drag_objects.clear()
             return
         # if we're clicking to spawn something, don't drag/select
         if self.classname_to_spawn:
