@@ -95,6 +95,10 @@ MAX_ONION_FRAMES = 3
 class Application:
     # default window dimensions, may be updated during screen res detection
     window_width, window_height = 1280, 720
+    # if window gets extremely small it causes problems, enforce a minumum size
+    # (UI becomes hard to use below 640 x 480, but allow it in case user is
+    # doing something weird or reshuffling their desktop)
+    min_window_width, min_window_height = 320, 240
     fullscreen = False
     # framerate: uncapped if -1
     framerate = 30
@@ -184,6 +188,8 @@ class Application:
                                             winpos, winpos,
                                             self.window_width, self.window_height,
                                             flags)
+        sdl2.SDL_SetWindowMinimumSize(self.window, self.min_window_width,
+                                      self.min_window_height)
         # force GL2.1 'core' before creating context
         video.SDL_GL_SetAttribute(video.SDL_GL_CONTEXT_MAJOR_VERSION, 2)
         video.SDL_GL_SetAttribute(video.SDL_GL_CONTEXT_MINOR_VERSION, 1)
