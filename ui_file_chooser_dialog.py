@@ -353,7 +353,15 @@ class CharsetChooserItem(BaseFileChooserItem):
         return os.path.splitext(self.name)[0]
     
     def get_description_lines(self):
-        return ['Characters: %s' % str(self.charset.last_index)]
+        # first comment in file = description
+        lines = []
+        for line in open(self.charset.filename, encoding='utf-8').readlines():
+            line = line.strip()
+            if line.startswith('//'):
+                lines.append(line[2:])
+                break
+        lines.append('Characters: %s' % str(self.charset.last_index))
+        return lines
     
     def get_preview_texture(self, app):
         return self.charset.texture
