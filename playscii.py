@@ -629,6 +629,10 @@ class Application:
             for k,v in m.__dict__.items():
                 if not type(v) is type:
                     continue
+                # don't add duplicates
+                # (can happen if eg one importer extends another)
+                if v in classes:
+                    continue
                 if issubclass(v, base_class) and v is not base_class:
                     classes.append(v)
         return classes

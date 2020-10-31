@@ -63,15 +63,7 @@ class ImageConverter:
         self.src_img = self.src_img.resize((w, h), resample=scale_method)
         # convert source image to art's palette
         self.src_img = self.art.palette.get_palettized_image(self.src_img)
-        # build table of color diffs
-        unique_colors = len(self.art.palette.colors)
-        self.color_diffs = np.zeros((unique_colors, unique_colors), dtype=np.float32)
-        # option: L*a*b color space conversion for greater accuracy
-        get_color_diff = self.get_lab_color_diff if self.lab_color_comparison else self.get_rgb_color_diff
-        #get_color_diff = self.get_nonlinear_rgb_color_diff
-        for i,color in enumerate(self.art.palette.colors):
-            for j,other_color in enumerate(self.art.palette.colors):
-                self.color_diffs[i][j] = get_color_diff(color, other_color)
+        self.color_diffs = self.get_generated_color_diffs(self.art.palette.colors)
         # convert palettized source image to an array for fast comparisons
         self.src_array = np.fromstring(self.src_img.tobytes(), dtype=np.uint8)
         src_w, src_h = self.src_img.size
@@ -116,6 +108,18 @@ class ImageConverter:
                     break
         self.init_success = True
     
+    def get_generated_color_diffs(self, colors):
+        # build table of color diffs
+        unique_colors = len(colors)
+        color_diffs = np.zeros((unique_colors, unique_colors), dtype=np.float32)
+        # option: L*a*b color space conversion for greater accuracy
+        get_color_diff = self.get_lab_color_diff if self.lab_color_comparison else self.get_rgb_color_diff
+        #get_color_diff = self.get_nonlinear_rgb_color_diff
+        for i,color in enumerate(colors):
+            for j,other_color in enumerate(colors):
+                color_diffs[i][j] = get_color_diff(color, other_color)
+        return color_diffs
+    
     def get_rgb_color_diff(self, color1, color2):
         r = abs(color1[0] - color2[0])
         g = abs(color1[1] - color2[1])
@@ -159,18 +163,21 @@ class ImageConverter:
                     self.finish()
                     break
     
-    def get_best_tile_for_block(self, src_block):
-        "returns a (char, fg, bg) tuple for the best match of given block"
+    def get_color_combos_for_block(self, src_block):
+        """
+        returns # of unique colors, AND
+        list of unique (fg, bg) color index tuples for given block
+        """
         # get unique colors in source block
         colors, counts = np.unique(src_block, False, False, return_counts=True)
+        # early out for single-color blocks
         if len(colors) == 1:
-            return (0, 0, colors[0])
+            return colors, []
         # sort by most to least used colors
         color_counts = []
         for i,color in enumerate(colors):
             color_counts += [(color, counts[i])]
         color_counts.sort(key=lambda item: item[1], reverse=True)
-        # build list of unique fg/bg color (index) tuple-pairs
         combos = []
         for color1,count1 in color_counts:
             for color2,count2 in color_counts:
@@ -180,6 +187,17 @@ class ImageConverter:
                 if (color1, color2) in combos:
                     continue
                 combos.append((color1, color2))
+        return colors, combos
+    
+    def get_best_tile_for_block(self, src_block):
+        "returns a (char, fg, bg) tuple for the best match of given block"
+        colors, combos = self.get_color_combos_for_block(src_block)
+        # single color block?
+        if len(combos) == 0:
+            # if a block is all transparent pixels or outside image bounds,
+            # no unique colors will be found
+            bg = 0 if len(colors) == 0 else colors[0]
+            return (0, 0, bg)
         # compare all combos + chars w/ source block
         best_char = 0
         best_diff = 9999999999999
@@ -193,7 +211,10 @@ class ImageConverter:
             char_array[char_array == 1] = fg
             for (x0, y0, x1, y1) in self.char_blocks:
                 char_block = char_array[y0:y1, x0:x1]
-                diff = self.get_block_diff(src_block, char_block)
+                # using array of difference values w/ fancy numpy indexing,
+                # sum() it
+                # (used to be get_block_diff(block1, block2))
+                diff = self.color_diffs[src_block, char_block].sum()
                 # no difference = return immediately
                 if diff == 0:
                     return (char_index, fg, bg)
@@ -219,10 +240,6 @@ class ImageConverter:
                     s += '.'
             s += '\n'
         print(s)
-    
-    def get_block_diff(self, block1, block2):
-        # build array of difference values w/ fancy numpy indexing, sum() it
-        return self.color_diffs[block1, block2].sum()
     
     def finish(self, cancelled=False):
         self.finished = True

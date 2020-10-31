@@ -15,6 +15,9 @@ Field = namedtuple('Field', ['label', # text label for field
                              'oneline']) # label and field drawn on same line
 
 
+# "null" field type that tells UI drawing to skip it
+class SkipFieldType: pass
+
 class ConfirmButton(UIButton):
     caption = 'Confirm'
     caption_justify = TEXT_CENTER
@@ -114,7 +117,9 @@ class UIDialog(UIElement):
         h += 0 if len(msg_lines) == 0 else len(msg_lines) + 1
         # determine height of each field from self.fields
         for field in self.fields:
-            if field.oneline or field.type is bool or field.type is None:
+            if field.type is SkipFieldType:
+                continue
+            elif field.oneline or field.type is bool or field.type is None:
                 h += self.y_spacing + 1
             else:
                 h += self.y_spacing + 2
@@ -237,6 +242,8 @@ class UIDialog(UIElement):
         if self.message:
             y += len(self.get_message()) + 1
         for i,field in enumerate(self.fields):
+            if field.type is SkipFieldType:
+                continue
             x = 2
             # bool values: checkbox or radio button, always draw label to right
             if field.type is bool:
@@ -347,7 +354,7 @@ class UIDialog(UIElement):
                 self.active_field -= 1
                 self.active_field %= len(self.fields)
                 # skip over None-type fields aka dead labels
-                while self.fields[self.active_field].type is None:
+                while self.fields[self.active_field].type is None or self.fields[self.active_field].type is SkipFieldType:
                     self.active_field -= 1
                     self.active_field %= len(self.fields)
             return
@@ -355,7 +362,7 @@ class UIDialog(UIElement):
             if len(self.fields) > 1:
                 self.active_field += 1
                 self.active_field %= len(self.fields)
-                while self.fields[self.active_field].type is None:
+                while self.fields[self.active_field].type is None or self.fields[self.active_field].type is SkipFieldType:
                     self.active_field += 1
                     self.active_field %= len(self.fields)
             return
