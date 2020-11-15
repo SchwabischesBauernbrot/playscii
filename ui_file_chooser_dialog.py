@@ -399,6 +399,8 @@ class CharSetChooserDialog(BaseFileChooserDialog):
         item = self.get_selected_item()
         self.ui.active_art.set_charset(item.charset, log=True)
         self.ui.popup.set_active_charset(item.charset)
+        # change in charset aspect should update camera limits
+        self.ui.app.camera.set_for_art(self.ui.active_art)
 
 
 class ArtScriptChooserItem(BaseFileChooserItem):
