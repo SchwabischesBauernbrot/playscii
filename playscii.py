@@ -1019,13 +1019,6 @@ class Application:
         except:
             self.log("pdoc module needed for documentation generation not found.")
             return
-        # until better solution is found for "bloat from unchanged parent class
-        # members", exclude certain classes from doc export
-        blacklist = ['GameObjectRenderable', 'OnionTileRenderable']
-        def docfilter(obj):
-            if obj.name in blacklist:
-                return False
-            return True
         for module_name in AUTOGEN_DOC_MODULES:
             # pdoc.pdoc takes module name as string, returns HTML doc string
             html = pdoc.pdoc(module_name)
