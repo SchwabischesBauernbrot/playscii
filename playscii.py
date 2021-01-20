@@ -1027,8 +1027,8 @@ class Application:
                 return False
             return True
         for module_name in AUTOGEN_DOC_MODULES:
-            pdoc.import_module(module_name)
-            html = pdoc.html(module_name, docfilter=docfilter)
+            # pdoc.pdoc takes module name as string, returns HTML doc string
+            html = pdoc.pdoc(module_name)
             docfile = open(AUTOGEN_DOCS_PATH + module_name + '.html', 'w')
             docfile.write(html)
             docfile.close()
