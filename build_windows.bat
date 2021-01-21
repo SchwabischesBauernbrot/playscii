@@ -9,14 +9,8 @@ set COPY_INCLUDE=win_copy_include
 
 echo Creating new build...
 
-REM ==== include pdoc/mako templates from python site-packages - annoying!
-python -c "from site import getsitepackages; print(getsitepackages()[1])" > pypath
-set /p PYPATHSP=<pypath
-del pypath
-mkdir %OUTPUT_DIR%pdoc\templates\
-
 REM ==== -F = everything in one file; -w = no console window; -i = path to icon
-pyinstaller -F -w -i %ICON_PATH% --add-data %PYPATHSP%\pdoc\templates\*.mako;pdoc\templates\ playscii.py
+pyinstaller -F -w -i %ICON_PATH% --exclude-module pdoc playscii.py
 echo Build done!
 
 REM ==== move build so that ZIP will have a subdir enclosing everything

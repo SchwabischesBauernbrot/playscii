@@ -31,13 +31,12 @@ import PIL, OpenGL, numpy # just for version checks
 from sdl2 import video, sdlmixer
 from OpenGL import GL
 from PIL import Image
-# import pdoc here so pyinstaller recognizes it's a dependency,
-# but fail non-catastrophically
-# TODO: this shouldn't be necessary; remove this ASAP
+# cache whether pdoc is available for help menu item
+pdoc_available = False
 try:
-    import pdoc, markdown
-except:
-    pass
+    import pdoc
+    pdoc_available = True
+except: pass
 
 # submodules - set here so cfg file can modify them all easily
 from audio import AudioLord
@@ -365,6 +364,7 @@ class Application:
         # update UI (hovered elements) and cursor now that we have input
         self.ui.update()
         self.cursor.pre_first_update()
+        self.pdoc_available = pdoc_available
         self.init_success = True
         self.log('Init done.')
         if self.can_edit:

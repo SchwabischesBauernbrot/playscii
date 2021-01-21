@@ -547,8 +547,9 @@ class HelpDocsItem(ArtModePulldownMenuItem):
 class HelpGenerateDocsItem(ArtModePulldownMenuItem):
     label = 'Generate documentation'
     command = 'generate_docs'
-    always_active = True
     close_on_select = True
+    def should_dim(app):
+        return not app.pdoc_available
 
 class HelpWebsiteItem(ArtModePulldownMenuItem):
     label = 'Playscii website'
