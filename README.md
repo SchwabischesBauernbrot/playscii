@@ -27,6 +27,10 @@ If you run into any issues with Playscii, please report a bug here:
 
 [https://heptapod.host/jp-lebreton/playscii/issues](https://bitbucket.org/JPLeBreton/playscii/issues?status=new&status=open)
 
+## NFTs
+
+As Playscii's sole author, I have multiple objections to the creation and selling of Non-Fungible Token (NFT) art and do not approve of said use. Legally I cannot stop you but I offer absolutely no support to such users, and I am not interested in engaging with them on this subject. See [this section](http://vectorpoem.com/playscii/#nft) of the project's web page for more information on this.
+
 ## Roadmap
 
 For possible future features see Playscii's Trello:
