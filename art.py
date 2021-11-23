@@ -1007,10 +1007,11 @@ class Art:
     
     def composite_to(self, src_frame, src_layer, src_x, src_y, width, height,
                      dest_art, dest_frame, dest_layer, dest_x, dest_y):
-        # TODO: check source + dest bounds?
-        # if this is only called from game code, just let it throw the error
         for y in range(src_y, src_y + height):
             for x in range(src_x, src_x + width):
+                # never try to write out of bounds on dest art; let user be lazy
+                if x < 0 or x >= dest_art.width or y < 0 or y >= dest_art.height:
+                    continue
                 # only consider non-blank characters
                 if self.get_char_index_at(src_frame, src_layer, x, y) == 0:
                     continue
