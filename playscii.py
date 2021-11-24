@@ -1102,7 +1102,8 @@ class Logger:
         self.log_file.close()
 
 
-if __name__ == "__main__":
+def get_app():
+    "creates and returns the Application instance"
     # get paths for config file, later to be passed into Application
     config_dir, documents_dir, cache_dir = get_paths()
     # start logger even before Application has initialized so we can write to it
@@ -1170,7 +1171,11 @@ if __name__ == "__main__":
     app = Application(config_dir, documents_dir, cache_dir, logger,
                       art_to_load or DEFAULT_ART_FILENAME, game_dir_to_load,
                       state_to_load, autoplay_game)
+    return app
+
+if __name__ == "__main__":
+    app = get_app()
     error = app.main_loop()
     app.quit()
-    logger.close()
+    app.logger.close()
     sys.exit(error)
