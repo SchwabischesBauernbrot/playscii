@@ -69,6 +69,9 @@
 <p>
   Playscii should run in Windows Vista, 7, 8.1, and 10 (32-bit and 64-bit), macOS 10.10 Yosemite or higher, and any reasonably modern desktop version of Linux.
 </p>
+<p>
+  Note that the macOS .app bundle distributed on <a href="https://jp.itch.io/playscii">jp.itch.io</a> is 32-bit and so will not run on macOS Catalina (version 10.15) or later, but you can still <a href="#runfromsource">run from source</a> and/or <a href="#build">build your own bundle</a>.
+</p>
   Hardware-wise you'll need a video card that's capable of OpenGL 2.1, with GLSL 1.30 support. If your computer was made after 2008 or so, you're probably fine.  Playscii will detect your supported GLSL version on startup and quit with an error message if version 1.30 or higher is not found.
 </p>
 </div>
@@ -169,6 +172,9 @@ Once you have the dependencies installed, you can run Playscii from source like 
 </p>
 <p>
   The process for Mac Application bundles is quite similar: install PyInstaller, and run the <tt>build_mac.sh</tt> script.
+</p>
+<p>
+  Michael Lazar has created a fork of Playscii on Github, with only a few very minor changes, that has been reported by some Mac users to work well on their newer systems. See <a href="https://github.com/michael-lazar/playscii/blob/master/NOTES.txt">these notes from that repository</a> for specific commands to run to get the right build environment. I cannot offer support for builds made with this fork, however.
 </p>
 </div>
 
