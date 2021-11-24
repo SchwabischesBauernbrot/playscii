@@ -28,8 +28,8 @@ class Camera:
     min_velocity = 0.05
     # map extents
     # starting values only, bounds are generated according to art size
-    min_x,max_x = 0, 50
-    min_y,max_y = -50, 0
+    min_x,max_x = -10, 50
+    min_y,max_y = -50, 10
     use_bounds = True
     min_zoom,max_zoom = 1, 1000
     # matrices -> worldspace renderable vertex shader uniforms
