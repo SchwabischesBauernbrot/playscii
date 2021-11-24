@@ -52,7 +52,7 @@ from renderable_line import DebugLineRenderable
 from renderable_sprite import UIBGTextureRenderable, SpriteRenderable
 from framebuffer import Framebuffer
 from art import ART_DIR, ART_FILE_EXTENSION, ART_SCRIPT_DIR
-from ui import UI
+from ui import UI, OIS_WIDTH
 from cursor import Cursor
 from grid import ArtGrid
 from input_handler import InputLord
@@ -302,8 +302,8 @@ class Application:
         self.art_loaded_for_edit, self.edit_renderables = [], []
         # raster image overlay
         self.overlay_renderable = None
-        self.overlay_image_filename = ''
         self.draw_overlay = False
+        self.overlay_scale_type = OIS_WIDTH
         self.converter = None
         # set when an import is in progress
         self.importer = None
@@ -872,19 +872,15 @@ class Application:
     
     def set_overlay_image(self, image_filename):
         "sets given image to draw over the active art"
-        if not os.path.exists(image_filename):
-            return 'Image %s not found!' % image_filename
         try:
             img = Image.open(image_filename).convert('RGBA')
-            w, h = img.size
-            r = SpriteRenderable(self, None, img)
+            r = SpriteRenderable(self, image_filename, img)
             r.alpha = self.default_overlay_image_opacity
         except Exception as e:
             for line in traceback.format_exc().split('\n')[3:]:
                 if line.strip():
                     self.log(line.rstrip())
             return
-        self.overlay_image_filename = image_filename
         self.log('Using %s as overlay image.' % image_filename)
         self.overlay_renderable = r
         self.ui.size_and_position_overlay_image()

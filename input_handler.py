@@ -3,7 +3,7 @@ import sdl2
 
 from sys import exit
 
-from ui import SCALE_INCREMENT
+from ui import SCALE_INCREMENT, OIS_WIDTH, OIS_HEIGHT, OIS_FILL
 from renderable import LAYER_VIS_FULL, LAYER_VIS_DIM, LAYER_VIS_NONE
 from ui_art_dialog import NewArtDialog, SaveAsDialog, QuitUnsavedChangesDialog, CloseUnsavedChangesDialog, RevertChangesDialog, ResizeArtDialog, AddFrameDialog, DuplicateFrameDialog, FrameDelayDialog, FrameDelayAllDialog, FrameIndexDialog, AddLayerDialog, DuplicateLayerDialog, SetLayerNameDialog, SetLayerZDialog, PaletteFromFileDialog, ImportFileDialog, ExportFileDialog, SetCameraZoomDialog, ExportOptionsDialog, OverlayImageOpacityDialog
 from ui_game_dialog import NewGameDirDialog, LoadGameStateDialog, SaveGameStateDialog, AddRoomDialog, SetRoomCamDialog, SetRoomEdgeWarpsDialog, SetRoomBoundsObjDialog, RenameRoomDialog
@@ -742,6 +742,16 @@ class InputLord:
     
     def BIND_set_overlay_image_opacity(self):
         self.ui.open_dialog(OverlayImageOpacityDialog)
+    
+    def BIND_set_overlay_image_scaling(self):
+        if self.app.overlay_scale_type == OIS_WIDTH:
+           self.app.overlay_scale_type = OIS_HEIGHT
+        elif self.app.overlay_scale_type == OIS_HEIGHT:
+           self.app.overlay_scale_type = OIS_FILL
+        elif self.app.overlay_scale_type == OIS_FILL:
+            self.app.overlay_scale_type = OIS_WIDTH
+        self.ui.size_and_position_overlay_image()
+        self.ui.menu_bar.refresh_active_menu()
     
     def BIND_add_to_list_selection(self):
         if not self.ui.edit_list_panel.is_visible():

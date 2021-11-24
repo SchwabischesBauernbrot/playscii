@@ -22,6 +22,11 @@ SCALE_INCREMENT = 0.25
 # spacing factor of each non-active document's scale from active document
 MDI_MARGIN = 1.1
 
+# overlay image scale types
+OIS_WIDTH = 0
+OIS_HEIGHT = 1
+OIS_FILL = 2
+
 
 class UI:
     
@@ -175,8 +180,17 @@ class UI:
         r = self.app.overlay_renderable
         if not r:
             return
-        r.scale_x = self.active_art.width * self.active_art.quad_width
-        r.scale_y = self.active_art.height * self.active_art.quad_height
+        # scale aspect based on user setting
+        aspect = float(r.texture.width) / r.texture.height
+        if self.app.overlay_scale_type == OIS_WIDTH:
+            r.scale_x = self.active_art.width * self.active_art.quad_width
+            r.scale_y = r.scale_x / aspect
+        elif self.app.overlay_scale_type == OIS_HEIGHT:
+            r.scale_y = self.active_art.height * self.active_art.quad_height
+            r.scale_x = r.scale_y * aspect
+        elif self.app.overlay_scale_type == OIS_FILL:
+            r.scale_x = self.active_art.width * self.active_art.quad_width
+            r.scale_y = self.active_art.height * self.active_art.quad_height
         r.y = -r.scale_y
         r.z = self.active_art.layers_z[self.active_art.active_layer]
     

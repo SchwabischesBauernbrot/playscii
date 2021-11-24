@@ -333,6 +333,14 @@ class ViewSetOverlayImageOpacityItem(ArtModePulldownMenuItem):
     def should_dim(app):
         return app.overlay_renderable is None or not app.draw_overlay
 
+class ViewSetOverlayImageScalingItem(ArtModePulldownMenuItem):
+    label = 'blah'
+    command = 'set_overlay_image_scaling'
+    def get_label(app):
+        return 'Overlay image scaling: %s' % ['width', 'height', 'fill'][app.overlay_scale_type]
+    def should_dim(app):
+        return app.overlay_renderable is None or not app.draw_overlay
+
 #
 # art menu
 #
@@ -629,7 +637,7 @@ class ViewMenuData(PulldownMenuData):
              ViewToggleZoomExtentsItem, ViewZoomInItem, ViewZoomOutItem,
              ViewSetZoomItem, ViewToggleCameraTiltItem, SeparatorItem,
              ViewSetOverlayImageItem, ViewToggleOverlayImageItem,
-             ViewSetOverlayImageOpacityItem
+             ViewSetOverlayImageOpacityItem, ViewSetOverlayImageScalingItem
             ]
     
     def should_mark_item(item, ui):
