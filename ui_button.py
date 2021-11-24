@@ -41,6 +41,9 @@ class UIButton:
     pass_mouse_button = False
     # if true, clear all characters before painting a new caption
     clear_before_caption_draw = False
+    # if true, display a tooltip when hovered, and dismiss it when unhovered.
+    # contents set from get_tooltip_text and positioned by get_tooltip_location.
+    tooltip_on_hover = False
     
     def __init__(self, element, starting_state=None):
         self.element = element
@@ -80,9 +83,19 @@ class UIButton:
             for x in range(self.width):
                 self.element.art.set_tile_at(0, 0, self.x + x, self.y + y, None, fg, bg)
     
+    def update_tooltip(self):
+        tt = self.element.ui.tooltip
+        tt.reset_art()
+        tt.set_text(self.get_tooltip_text())
+        tt.tile_x, tt.tile_y = self.get_tooltip_location()
+        tt.reset_loc()
+    
     def hover(self):
         self.log_event('hovered')
         self.set_state('hovered')
+        if self.tooltip_on_hover:
+            self.element.ui.tooltip.visible = True
+            self.update_tooltip()
     
     def unhover(self):
         self.log_event('unhovered')
@@ -90,6 +103,18 @@ class UIButton:
             self.set_state('dimmed')
         else:
             self.set_state('normal')
+        if self.tooltip_on_hover:
+            # if two buttons are adjacent, we might be unhovering this one
+            # right after hovering the other in the same frame. if so,
+            # don't dismiss the tooltip
+            another_tooltip = False
+            for b in self.element.hovered_buttons:
+                if b is self:
+                    continue
+                if b.tooltip_on_hover:
+                    another_tooltip = True
+            if not another_tooltip:
+                self.element.ui.tooltip.visible = False
     
     def click(self):
         self.log_event('clicked')
@@ -101,6 +126,14 @@ class UIButton:
             self.hover()
         else:
             self.unhover()
+    
+    def get_tooltip_text(self):
+        "override in a subclass to define this button's tooltip text"
+        return 'ERROR'
+    
+    def get_tooltip_location(self):
+        "override in a subclass to define this button's tooltip screen location"
+        return 10, 10
     
     def draw_caption(self):
         y = self.y + self.caption_y

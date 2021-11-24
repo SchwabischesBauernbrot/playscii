@@ -22,25 +22,50 @@ class CharToggleButton(StatusBarToggleButton):
     x = 0
     caption = 'ch:'
     width = len(caption) + 1
+    tooltip_on_hover = True
+    def get_tooltip_text(self):
+        return 'character index: %s' % self.element.ui.selected_char
+    def get_tooltip_location(self):
+        return 1, self.element.get_tile_y() - 1
 
 class CharCycleButton(StatusBarCycleButton):
     x = CharToggleButton.width
+    tooltip_on_hover = True
+    # reuse above
+    def get_tooltip_text(self): return CharToggleButton.get_tooltip_text(self)
+    def get_tooltip_location(self): return CharToggleButton.get_tooltip_location(self)
 
 class FGToggleButton(StatusBarToggleButton):
     x = CharCycleButton.x + CharCycleButton.width
     caption = 'fg:'
     width = len(caption) + 1
+    tooltip_on_hover = True
+    def get_tooltip_text(self):
+        return 'foreground color index: %s' % self.element.ui.selected_fg_color
+    def get_tooltip_location(self):
+        return 8, self.element.get_tile_y() - 1
 
 class FGCycleButton(StatusBarCycleButton):
     x = FGToggleButton.x + FGToggleButton.width
+    tooltip_on_hover = True
+    def get_tooltip_text(self): return FGToggleButton.get_tooltip_text(self)
+    def get_tooltip_location(self): return FGToggleButton.get_tooltip_location(self)
 
 class BGToggleButton(StatusBarToggleButton):
     x = FGCycleButton.x + FGCycleButton.width
     caption = 'bg:'
     width = len(caption) + 1
+    tooltip_on_hover = True
+    def get_tooltip_text(self):
+        return 'background color index: %s' % self.element.ui.selected_bg_color
+    def get_tooltip_location(self):
+        return 15, self.element.get_tile_y() - 1
 
 class BGCycleButton(StatusBarCycleButton):
     x = BGToggleButton.x + BGToggleButton.width
+    tooltip_on_hover = True
+    def get_tooltip_text(self): return BGToggleButton.get_tooltip_text(self)
+    def get_tooltip_location(self): return BGToggleButton.get_tooltip_location(self)
 
 class XformToggleButton(StatusBarToggleButton):
     x = BGCycleButton.x + BGCycleButton.width
@@ -137,12 +162,15 @@ class StatusBarUI(UIElement):
         self.dim_xform_renderable.alpha = 0.75
         # create clickable buttons
         self.buttons = []
+        self.button_map = {}
         for button_class, button_name in self.button_names.items():
             button = button_class(self)
             setattr(self, button_name + '_button', button)
             cb_name = '%s_button_pressed' % button_name
             button.callback = getattr(self, cb_name)
             self.buttons.append(button)
+            # keep a mapping of button names to buttons, for eg tooltip updates
+            self.button_map[button_name] = button
             # some button captions, widths, locations will be set in reset_art
         # determine total width of left-justified items
         self.left_items_width = self.tool_cycle_button.x + self.tool_cycle_button.width + 15
@@ -299,6 +327,10 @@ class StatusBarUI(UIElement):
     def set_active_palette(self, new_palette):
         self.char_art.palette = self.fg_art.palette = self.bg_art.palette = new_palette
         self.reset_art()
+    
+    def get_tile_y(self):
+        "returns tile coordinate Y position of bar"
+        return int(self.ui.app.window_height / (self.ui.charset.char_height * self.ui.scale)) - 1
     
     def update_button_captions(self):
         "set captions for buttons that change from selections"

@@ -394,6 +394,27 @@ class DebugTextUI(UIElement):
             #self.art.clear_frame_layer(0, 0, 0, self.ui.colors.white)
 
 
+class ToolTip(UIElement):
+    
+    "popup text label that is invoked and controlled by a UIButton hover"
+    
+    visible = False
+    tile_width, tile_height = 30, 1
+    tile_x, tile_y = 10, 5
+    
+    def set_text(self, text):
+        self.art.write_string(0, 0, 0, 0, text,
+                              self.ui.colors.black, self.ui.colors.white)
+        # clear tiles past end of text
+        for x in range(len(text), self.tile_width):
+            self.art.set_color_at(0, 0, x, 0, 0, 0)
+    
+    def reset_art(self):
+        UIElement.reset_art(self)
+        self.art.clear_frame_layer(0, 0,
+                                   self.ui.colors.white, self.ui.colors.black)
+
+
 class GameLabel(UIElement):
     tile_width, tile_height = 50, 1
     game_mode_visible = True

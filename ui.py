@@ -4,7 +4,7 @@ from PIL import Image
 from OpenGL import GL
 
 from texture import Texture
-from ui_element import UIArt, FPSCounterUI, MessageLineUI, DebugTextUI, GameSelectionLabel, GameHoverLabel
+from ui_element import UIArt, FPSCounterUI, MessageLineUI, DebugTextUI, GameSelectionLabel, GameHoverLabel, ToolTip
 from ui_console import ConsoleUI
 from ui_status_bar import StatusBarUI
 from ui_popup import ToolPopup
@@ -108,6 +108,7 @@ class UI:
         self.message_line = MessageLineUI(self)
         self.debug_text = DebugTextUI(self)
         self.pulldown = PulldownMenu(self)
+        self.tooltip = ToolTip(self)
         self.menu_bar = None
         self.art_menu_bar = ArtMenuBar(self)
         self.game_menu_bar = GameMenuBar(self)
@@ -118,7 +119,7 @@ class UI:
         self.game_hover_label = GameHoverLabel(self)
         self.elements += [self.fps_counter, self.status_bar, self.popup,
                           self.message_line, self.debug_text, self.pulldown,
-                          self.art_menu_bar, self.game_menu_bar,
+                          self.art_menu_bar, self.game_menu_bar, self.tooltip,
                           self.edit_list_panel, self.edit_object_panel,
                           self.game_hover_label, self.game_selection_label]
         # add console last so it draws last
@@ -351,6 +352,12 @@ class UI:
             return
         # wrap at last valid index
         self.selected_char = new_char_index % self.active_art.charset.last_index
+        # only update char tooltip if it was already up; avoid stomping others
+        char_cycle_button = self.status_bar.button_map['char_cycle']
+        char_toggle_button = self.status_bar.button_map['char_toggle']
+        if char_cycle_button in self.status_bar.hovered_buttons or \
+            char_toggle_button in self.status_bar.hovered_buttons:
+            char_toggle_button.update_tooltip()
         self.tool_settings_changed = True
     
     def select_color(self, new_color_index, fg):
@@ -362,6 +369,12 @@ class UI:
             self.selected_fg_color = new_color_index
         else:
             self.selected_bg_color = new_color_index
+        # same don't-stomp-another-tooltip check as above
+        toggle_button = self.status_bar.button_map['fg_toggle'] if fg else self.status_bar.button_map['bg_toggle']
+        cycle_button = self.status_bar.button_map['fg_cycle'] if fg else self.status_bar.button_map['bg_cycle']
+        if toggle_button in self.status_bar.hovered_buttons or \
+           cycle_button in self.status_bar.hovered_buttons:
+            toggle_button.update_tooltip()
         self.tool_settings_changed = True
     
     def select_fg(self, new_fg_index):
