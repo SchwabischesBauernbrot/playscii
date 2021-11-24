@@ -174,6 +174,10 @@ class ToolTogglePickerHoldItem(ArtModePulldownMenuItem):
     def get_label(app):
         return 'Picker toggle key: %s' % ['press', 'hold'][app.ui.popup_hold_to_show]
 
+class ToolSwapSelectedColors(ArtModePulldownMenuItem):
+    label = 'Swap selected fg/bg colors'
+    command = 'swap_fg_bg_colors'
+
 class ToolPaintItem(ArtModePulldownMenuItem):
     # two spaces in front of each label to leave room for mark
     label = '  %s' % PencilTool.button_caption
@@ -586,7 +590,8 @@ class EditMenuData(PulldownMenuData):
              EditPreferences]
 
 class ToolMenuData(PulldownMenuData):
-    items = [ToolTogglePickerItem, ToolTogglePickerHoldItem, SeparatorItem,
+    items = [ToolTogglePickerItem, ToolTogglePickerHoldItem,
+             ToolSwapSelectedColors, SeparatorItem,
              ToolPaintItem, ToolEraseItem, ToolRotateItem, ToolGrabItem,
              ToolTextItem, ToolSelectItem, ToolPasteItem, SeparatorItem,
              ToolIncreaseBrushSizeItem, ToolDecreaseBrushSizeItem,
