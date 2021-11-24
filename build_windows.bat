@@ -10,7 +10,7 @@ set COPY_INCLUDE=win_copy_include
 echo Creating new build...
 
 REM ==== -F = everything in one file; -w = no console window; -i = path to icon
-pyinstaller -F -w -i %ICON_PATH% --exclude-module pdoc playscii.py
+python -m PyInstaller -F -w -i %ICON_PATH% --exclude-module pdoc playscii.py
 echo Build done!
 
 REM ==== move build so that ZIP will have a subdir enclosing everything
