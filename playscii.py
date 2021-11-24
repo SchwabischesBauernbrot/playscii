@@ -49,7 +49,7 @@ from art_import import ArtImporter
 from art_export import ArtExporter
 from renderable import TileRenderable, OnionTileRenderable
 from renderable_line import DebugLineRenderable
-from renderable_sprite import UIBGTextureRenderable
+from renderable_sprite import UIBGTextureRenderable, SpriteRenderable
 from framebuffer import Framebuffer
 from art import ART_DIR, ART_FILE_EXTENSION, ART_SCRIPT_DIR
 from ui import UI
@@ -110,6 +110,7 @@ class Application:
     # use capslock as another ctrl key - SDL2 doesn't seem to respect OS setting
     capslock_is_ctrl = False
     bg_color = [0.2, 0.2, 0.2, 2]
+    default_overlay_image_opacity = 0.25
     show_bg_texture = True
     # if True, ignore camera loc saved in .psci files
     override_saved_camera = False
@@ -299,8 +300,10 @@ class Application:
         self.art_camera = Camera(self)
         self.camera = self.art_camera
         self.art_loaded_for_edit, self.edit_renderables = [], []
-        # raster images (debug)
-        self.img_renderables = []
+        # raster image overlay
+        self.overlay_renderable = None
+        self.overlay_image_filename = ''
+        self.draw_overlay = False
         self.converter = None
         # set when an import is in progress
         self.importer = None
@@ -867,6 +870,26 @@ class Application:
             debug.append(get_onion_info(i, r))
         self.ui.debug_text.post_lines(debug)
     
+    def set_overlay_image(self, image_filename):
+        "sets given image to draw over the active art"
+        if not os.path.exists(image_filename):
+            return 'Image %s not found!' % image_filename
+        try:
+            img = Image.open(image_filename).convert('RGBA')
+            w, h = img.size
+            r = SpriteRenderable(self, None, img)
+            r.alpha = self.default_overlay_image_opacity
+        except Exception as e:
+            for line in traceback.format_exc().split('\n')[3:]:
+                if line.strip():
+                    self.log(line.rstrip())
+            return
+        self.overlay_image_filename = image_filename
+        self.log('Using %s as overlay image.' % image_filename)
+        self.overlay_renderable = r
+        self.ui.size_and_position_overlay_image()
+        self.draw_overlay = True
+    
     def render(self):
         # draw main scene to framebuffer
         GL.glBindFramebuffer(GL.GL_FRAMEBUFFER, self.fb.framebuffer)
@@ -906,8 +929,8 @@ class Application:
                not self.ui.active_dialog:
                 self.cursor.render()
         self.debug_line_renderable.render()
-        for r in self.img_renderables:
-            r.render()
+        if self.draw_overlay and not self.game_mode:
+            self.overlay_renderable.render()
         # draw framebuffer to screen
         GL.glBindFramebuffer(GL.GL_FRAMEBUFFER, 0)
         self.fb.render()

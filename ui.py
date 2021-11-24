@@ -170,6 +170,16 @@ class UI:
         # recalc renderables' quad size (same scale, different aspect)
         self.set_scale(self.scale)
     
+    def size_and_position_overlay_image(self):
+        # called any time active art changes, or active art changes size
+        r = self.app.overlay_renderable
+        if not r:
+            return
+        r.scale_x = self.active_art.width * self.active_art.quad_width
+        r.scale_y = self.active_art.height * self.active_art.quad_height
+        r.y = -r.scale_y
+        r.z = self.active_art.layers_z[self.active_art.active_layer]
+    
     def set_active_art(self, new_art):
         self.active_art = new_art
         new_charset = self.active_art.charset
@@ -200,6 +210,8 @@ class UI:
         self.reset_edit_renderables()
         # now that renderables are moved, rescale/reposition grid
         self.app.grid.reset()
+        # rescale/reposition overlay image
+        self.size_and_position_overlay_image()
         # tell select tool renderables
         for r in [self.select_tool.select_renderable,
                   self.select_tool.drag_renderable]:
@@ -346,6 +358,7 @@ class UI:
         layer_name = self.active_art.layer_names[self.active_art.active_layer]
         if self.app.can_edit:
             self.message_line.post_line(self.layer_selected_log % layer_name)
+        self.size_and_position_overlay_image()
     
     def select_char(self, new_char_index):
         if not self.active_art:
@@ -512,9 +525,10 @@ class UI:
     def adjust_for_art_resize(self, art):
         if art is not self.active_art:
             return
-        # update grid, camera, cursor
+        # update grid, camera, cursor, overlay
         self.app.camera.set_for_art(art)
         self.app.camera.toggle_zoom_extents(override=True)
+        self.size_and_position_overlay_image()
         self.reset_edit_renderables()
         self.app.grid.reset()
         if self.app.cursor.x > art.width:

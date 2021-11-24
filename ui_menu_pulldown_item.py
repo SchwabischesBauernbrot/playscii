@@ -315,6 +315,24 @@ class ViewToggleCameraTiltItem(ArtModePulldownMenuItem):
     def should_mark(ui):
         return ui.app.camera.y_tilt != 0
 
+class ViewSetOverlayImageItem(ArtModePulldownMenuItem):
+    label = 'Set overlay image…'
+    command = 'select_overlay_image'
+
+class ViewToggleOverlayImageItem(ArtModePulldownMenuItem):
+    label = '  Toggle overlay image'
+    command = 'toggle_overlay_image'
+    def should_mark(ui):
+        return ui.app.draw_overlay
+    def should_dim(app):
+        return app.overlay_renderable is None
+
+class ViewSetOverlayImageOpacityItem(ArtModePulldownMenuItem):
+    label = 'Set overlay image opacity…'
+    command = 'set_overlay_image_opacity'
+    def should_dim(app):
+        return app.overlay_renderable is None or not app.draw_overlay
+
 #
 # art menu
 #
@@ -609,7 +627,10 @@ class ViewMenuData(PulldownMenuData):
     items = [ViewToggleCRTItem, ViewToggleGridItem, ViewBGTextureItem,
              SeparatorItem,
              ViewToggleZoomExtentsItem, ViewZoomInItem, ViewZoomOutItem,
-             ViewSetZoomItem, ViewToggleCameraTiltItem]
+             ViewSetZoomItem, ViewToggleCameraTiltItem, SeparatorItem,
+             ViewSetOverlayImageItem, ViewToggleOverlayImageItem,
+             ViewSetOverlayImageOpacityItem
+            ]
     
     def should_mark_item(item, ui):
         if hasattr(item, 'should_mark'):

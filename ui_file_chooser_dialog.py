@@ -399,8 +399,9 @@ class CharSetChooserDialog(BaseFileChooserDialog):
         item = self.get_selected_item()
         self.ui.active_art.set_charset(item.charset, log=True)
         self.ui.popup.set_active_charset(item.charset)
-        # change in charset aspect should update camera limits
-        self.ui.app.camera.set_for_art(self.ui.active_art)
+        # change in charset aspect should be treated as a resize
+        # for purposes of grid, camera, cursor, overlay
+        self.ui.adjust_for_art_resize(self.ui.active_art)
 
 
 class ArtScriptChooserItem(BaseFileChooserItem):
@@ -449,4 +450,15 @@ class RunArtScriptDialog(BaseFileChooserDialog):
         item = self.get_selected_item()
         self.ui.app.last_art_script = item.name
         self.ui.active_art.run_script(item.name, log=False)
+        self.dismiss()
+
+
+class OverlayImageFileChooserDialog(ImageFileChooserDialog):
+    
+    title = 'Choose overlay image'
+    confirm_caption = 'Choose'
+    
+    def confirm_pressed(self):
+        filename = self.field_texts[0]
+        self.ui.app.set_overlay_image(filename)
         self.dismiss()

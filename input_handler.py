@@ -5,10 +5,10 @@ from sys import exit
 
 from ui import SCALE_INCREMENT
 from renderable import LAYER_VIS_FULL, LAYER_VIS_DIM, LAYER_VIS_NONE
-from ui_art_dialog import NewArtDialog, SaveAsDialog, QuitUnsavedChangesDialog, CloseUnsavedChangesDialog, RevertChangesDialog, ResizeArtDialog, AddFrameDialog, DuplicateFrameDialog, FrameDelayDialog, FrameDelayAllDialog, FrameIndexDialog, AddLayerDialog, DuplicateLayerDialog, SetLayerNameDialog, SetLayerZDialog, PaletteFromFileDialog, ImportFileDialog, ExportFileDialog, SetCameraZoomDialog, ExportOptionsDialog
+from ui_art_dialog import NewArtDialog, SaveAsDialog, QuitUnsavedChangesDialog, CloseUnsavedChangesDialog, RevertChangesDialog, ResizeArtDialog, AddFrameDialog, DuplicateFrameDialog, FrameDelayDialog, FrameDelayAllDialog, FrameIndexDialog, AddLayerDialog, DuplicateLayerDialog, SetLayerNameDialog, SetLayerZDialog, PaletteFromFileDialog, ImportFileDialog, ExportFileDialog, SetCameraZoomDialog, ExportOptionsDialog, OverlayImageOpacityDialog
 from ui_game_dialog import NewGameDirDialog, LoadGameStateDialog, SaveGameStateDialog, AddRoomDialog, SetRoomCamDialog, SetRoomEdgeWarpsDialog, SetRoomBoundsObjDialog, RenameRoomDialog
 from ui_info_dialog import PagedInfoDialog
-from ui_file_chooser_dialog import ArtChooserDialog, CharSetChooserDialog, PaletteChooserDialog, PaletteFromImageChooserDialog, RunArtScriptDialog
+from ui_file_chooser_dialog import ArtChooserDialog, CharSetChooserDialog, PaletteChooserDialog, PaletteFromImageChooserDialog, RunArtScriptDialog, OverlayImageFileChooserDialog
 from ui_list_operations import LO_NONE, LO_SELECT_OBJECTS, LO_SET_SPAWN_CLASS, LO_LOAD_STATE, LO_SET_ROOM, LO_SET_ROOM_OBJECTS, LO_SET_OBJECT_ROOMS, LO_OPEN_GAME_DIR, LO_SET_ROOM_EDGE_WARP, LO_SET_ROOM_EDGE_WARP, LO_SET_ROOM_EDGE_OBJ, LO_SET_ROOM_CAMERA
 from collision import CT_NONE
 from art import ART_DIR, ART_FILE_EXTENSION
@@ -732,6 +732,16 @@ class InputLord:
             self.app.camera.y_tilt = 2
             self.ui.message_line.post_line('Camera tilt engaged.')
         self.ui.menu_bar.refresh_active_menu()
+    
+    def BIND_select_overlay_image(self):
+        self.ui.open_dialog(OverlayImageFileChooserDialog)
+    
+    def BIND_toggle_overlay_image(self):
+        self.app.draw_overlay = not self.app.draw_overlay
+        self.ui.menu_bar.refresh_active_menu()
+    
+    def BIND_set_overlay_image_opacity(self):
+        self.ui.open_dialog(OverlayImageOpacityDialog)
     
     def BIND_add_to_list_selection(self):
         if not self.ui.edit_list_panel.is_visible():

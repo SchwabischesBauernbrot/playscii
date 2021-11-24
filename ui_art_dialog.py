@@ -738,3 +738,33 @@ class SetCameraZoomDialog(UIDialog):
         camera = self.ui.app.camera
         camera.z = camera.get_base_zoom() / (new_zoom_pct / 100)
         self.dismiss()
+
+
+class OverlayImageOpacityDialog(UIDialog):
+    title = 'Set overlay image opacity'
+    field0_label = 'New overlay opacity %:'
+    field_width = UIDialog.default_short_field_width
+    fields = [
+        Field(label=field0_label, type=float, width=field_width, oneline=True)
+    ]
+    confirm_caption = 'Set'
+    invalid_opacity_error = 'Opacity % must be between 0 and 100.'
+    
+    def get_initial_field_text(self, field_number):
+        if field_number == 0:
+            return '%.1f' % (self.ui.app.overlay_renderable.alpha * 100)
+        return ''
+    
+    def is_input_valid(self):
+        try: opacity = float(self.field_texts[0])
+        except: return False, self.invalid_opacity_error
+        if opacity <= 0 or opacity > 100:
+            return False, self.invalid_opacity_error
+        return True, None
+    
+    def confirm_pressed(self):
+        valid, reason = self.is_input_valid()
+        if not valid: return
+        new_opacity = float(self.field_texts[0])
+        self.ui.app.overlay_renderable.alpha = new_opacity / 100
+        self.dismiss()

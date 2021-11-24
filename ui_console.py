@@ -11,7 +11,6 @@ from palette import PaletteFromFile
 
 from image_export import export_still_image, export_animation
 
-from renderable_sprite import SpriteRenderable
 from PIL import Image
 
 # imports for console execution namespace - be careful!
@@ -103,19 +102,13 @@ class ConvertImageCommand(ConsoleCommand):
         ImageConverter(console.ui.app, image_filename, console.ui.active_art)
         console.ui.app.update_window_title()
 
-class ShowImageCommand(ConsoleCommand):
-    description = 'Show given bitmap image on screen. (DEBUG ONLY)'
+class OverlayImageCommand(ConsoleCommand):
+    description = 'Draw given bitmap image over active art document.'
     def execute(console, args):
         if len(args) == 0:
             return 'Usage: img [image filename]'
         image_filename = ' '.join(args)
-        if not os.path.exists(image_filename):
-            return 'Image %s not found!' % image_filename
-        img = Image.open(image_filename).convert('RGB')
-        w, h = img.size
-        r = SpriteRenderable(console.ui.app, None, img)
-        console.ui.app.img_renderables.append(r)
-        r.scale_x, r.scale_y = w / 8, h / 8
+        console.ui.app.set_overlay_image(image_filename)
 
 class ImportCommand(ConsoleCommand):
     description = 'Import file using an ArtImport class'
@@ -251,7 +244,7 @@ commands = {
     'screv': RunEveryArtScriptCommand,
     'scrstop': StopArtScriptsCommand,
     'revert': RevertArtCommand,
-    'img': ShowImageCommand,
+    'img': OverlayImageCommand,
     'imp': ImportCommand,
     'exp': ExportCommand
 }

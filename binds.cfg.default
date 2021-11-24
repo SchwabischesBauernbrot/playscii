@@ -65,6 +65,7 @@ self.edit_bind_src = {
     'shift ctrl z': 'redo',
     'q'        : 'quick_grab',
     'shift t'  : 'toggle_camera_tilt',
+    'i'        : 'toggle_overlay_image',
     '='        : 'camera_zoom_in_proportional',
     '-'        : 'camera_zoom_out_proportional',
     'return'   : 'select_or_paint',
@@ -97,7 +98,7 @@ self.edit_bind_src = {
     'f1'       : 'open_help_docs',
     'ctrl k'   : 'crop_to_selection',
     'ctrl r'   : 'resize_art',
-	'ctrl t'   : 'run_art_script_last',
+    'ctrl t'   : 'run_art_script_last',
     'ctrl f'   : 'add_frame',
     'ctrl l'   : ('add_layer', 'select_objects'),
     'ctrl h'   : 'choose_charset',
@@ -166,5 +167,7 @@ self.edit_bind_src = {
     '_art_flip_horizontal': 'art_flip_horizontal',
     '_art_flip_vertical': 'art_flip_vertical',
     '_art_toggle_flip_affects_xforms': 'art_toggle_flip_affects_xforms',
-    '_edit_cfg': 'edit_cfg'
+    '_edit_cfg': 'edit_cfg',
+    '_select_overlay_image': 'select_overlay_image',
+    '_set_overlay_image_opacity': 'set_overlay_image_opacity'
 }
