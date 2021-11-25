@@ -25,7 +25,7 @@ The latest version of the HTML documentation resides here:
 
 If you run into any issues with Playscii, please report a bug here:
 
-[https://heptapod.host/jp-lebreton/playscii/issues](https://bitbucket.org/JPLeBreton/playscii/issues?status=new&status=open)
+[https://heptapod.host/jp-lebreton/playscii/issues](https://heptapod.host/jp-lebreton/playscii/issues)
 
 ## NFTs
 
