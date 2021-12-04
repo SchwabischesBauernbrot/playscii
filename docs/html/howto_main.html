@@ -83,7 +83,12 @@ If you're looking at Playscii in the <a href="https://itch.io/app">itch.io app</
 If you downloaded the ZIP file with "win32" in its name, you should have a Windows build you can run by double-clicking <tt>playscii.exe</tt>, without needing to install anything listed below.
 </p>
 <p>
-If you downloaded the DMG file, this is the Mac application bundle which can be installed in the standard manner, by opening the disk image file and then dragging <tt>Playscii.app</tt> into your <tt>Applications</tt> folder. You don't need to install anything else.
+  If you downloaded the DMG file, this is the Mac application bundle which can be installed in the standard manner, by opening the disk image file and then dragging <tt>Playscii.app</tt> into your <tt>Applications</tt> folder. You don't need to install anything else.
+<blockquote>
+  <b><i>Please note</i></b> that as of at least macOS 10.13 "High Sierra" and later, you will have to bypass an OS-level security feature to run Playscii, as it is <a href="https://developer.apple.com/videos/play/wwdc2019/703/">non-notarized</a> software. I have no plans to offer notarized macOS builds. Once you've got Playscii.app in your Applications folder, run the following command from a Terminal: <br/>
+  <tt>xattr -dr com.apple.quarantine /Applications/Playscii.app</tt> <br/>
+  You should then be able to click the app to launch it as normal.
+</blockquote>
 </p>
 <p>
 If you downloaded the ZIP file with "source" in its name or from the project's <a href="https://heptapod.host/jp-lebreton/playscii">source code repository</a>, you can run Playscii from its source code on any of the supported operating systems if you have Python and a few libraries installed.  See the <a href="#runfromsource">Running from Source</a> and <a href="#build">Building</a> sections below.

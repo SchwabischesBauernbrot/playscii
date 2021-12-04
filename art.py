@@ -1183,6 +1183,8 @@ class ArtInstance(Art):
         self.script_rates = []
         self.scripts_next_exec_time = []
         self.renderables = []
+        # instances shouldn't have instances; cause user problems if attempted
+        self.instances = None
         self.restore_from_source()
         self.source.instances.append(self)
     
