@@ -257,6 +257,9 @@ class GameObject:
             self.art = self.app.new_art(self.art_src, self.art_width,
                                         self.art_height, self.art_charset,
                                         self.art_palette)
+            # generated art will likely be only entry in this dict,
+            # but make sure it's there (eg generated art for Characters)
+            self.arts[self.art_src] = self.art
         else:
             self.load_arts()
         if self.art is None or not self.art.valid:
