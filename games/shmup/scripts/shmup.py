@@ -217,7 +217,7 @@ class Starfield(GameObject):
     generate_art = True
     art_width, art_height = 30, 41
     art_charset = 'jpetscii'
-    alpha = 0.25
+    alpha = 0.25 # NOTE: this will be overriden by saved instance because it's in the list of serialized properties
     # indices of star characters
     star_chars = [201]
     

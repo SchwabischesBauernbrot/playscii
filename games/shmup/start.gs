@@ -40,7 +40,7 @@
    "z": 0.0
   },
   {
-   "alpha": 0.25,
+   "alpha": 0.6,
    "animating": false,
    "art_off_pct_x": 0.5,
    "art_off_pct_y": 0.5,
