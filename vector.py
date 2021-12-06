@@ -53,28 +53,69 @@ class Vec3:
 
 def get_tiles_along_line(x0, y0, x1, y1):
     """
-    Return list of (x,y) tuples for all tiles crossing given line points
+    Return list of (x,y) tuples for all tiles crossing given worldspace
+    line points.
+    NOTE: this implementation assumes square tiles!
+    from http://playtechs.blogspot.com/2007/03/raytracing-on-grid.html
     """
+    dx, dy = abs(x1 - x0), abs(y1 - y0)
+    x, y = math.floor(x0), math.floor(y0)
+    n = 1
+    if dx == 0:
+        x_inc = 0
+        error = float('inf')
+    elif x1 > x0:
+        x_inc = 1
+        n += math.floor(x1) - x
+        error = (math.floor(x0) + 1 - x0) * dy
+    else:
+        x_inc = -1
+        n += x - math.floor(x1)
+        error = (x0 - math.floor(x0)) * dy
+    if dy == 0:
+        y_inc = 0
+        error -= float('inf')
+    elif y1 > y0:
+        y_inc = 1
+        n += math.floor(y1) - y
+        error -= (math.floor(y0) + 1 - y0) * dx
+    else:
+        y_inc = -1
+        n += y - math.floor(y1)
+        error -= (y0 - math.floor(y0)) * dx
     tiles = []
-    dx, dy = x1 - x0, y1 - y0
-    if dx == 0 and dy == 0:
-        return [(x0, y0)]
-    elif dx == 0:
-        for y in range(y0, y1):
-            tiles.append((x0, y))
-        return tiles
-    # Bresenham's line algorithm
-    delta_error = abs(float(dy) / dx)
-    error = 0.
-    y = y0
-    for x in range(x0, x1):
+    while n > 0:
         tiles.append((x, y))
-        error += delta_error
-        while error >= 0.5:
-            y += 1 if dy >= 0 else -1
-            error -= 1.0
-    # include end point tile, algo stops short of it
-    tiles.append((x1, y1))
+        if error > 0:
+            y += y_inc
+            error -= dx
+        else:
+            x += x_inc
+            error += dy
+        n -= 1
+    return tiles
+
+def get_tiles_along_integer_line(x0, y0, x1, y1):
+    "simplified version of get_tiles_along_line using only integer math"
+    dx, dy = abs(x1 - x0), abs(y1 - y0)
+    x = x0
+    y = y0
+    n = 1 + dx + dy
+    x_inc = 1 if x1 > x0 else -1
+    y_inc = 1 if y1 > y0 else -1
+    error = dx - dy
+    dx *= 2
+    dy *= 2
+    tiles = []
+    while n > 0:
+        tiles.append((x, y))
+        if error > 0:
+            x += x_inc
+            error -= dy
+        else:
+            y += y_inc
+            error += dx
+        n -= 1
     return tiles
 
 def cut_xyz(x, y, z, threshold):
