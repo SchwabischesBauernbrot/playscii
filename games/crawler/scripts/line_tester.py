@@ -5,6 +5,9 @@ from game_object import GameObject
 from renderable_line import DebugLineRenderable
 
 
+# stuff for troubleshooting "get tiles intersecting line" etc
+
+
 class DebugMarker(GameObject):
     art_width, art_height = 1, 1
     art_off_pct_x, art_off_pct_y = 0.0, 0.0
@@ -43,16 +46,12 @@ class LineTester(GameObject):
         tiles = line_func(self.mark_a.x, self.mark_a.y,
                           self.mark_b.x, self.mark_b.y)
         for tile in tiles:
-            #x, y = self.x + tile[0], self.y - tile[1]
-            # world to tile: self.get_tile_at_point(world_x, world_y)
-            # tile to world: self.get_tile_loc(tile_x, tile_y)
             x, y = self.get_tile_at_point(tile[0], tile[1])
-            #x, y = int(x), int(y)
             char, fg = 1, 6
-            print('%s, %s' % (x, y))
             self.art.set_tile_at(0, 0, x, y, char, fg)
     
     def render(self, layer, z_override=None):
         GameObject.render(self, layer, z_override)
-        if hasattr(self, 'line') and self.line: # blech
+        # TODO not sure why this is necessary, pre_first_update should run before first render(), right? blech
+        if hasattr(self, 'line') and self.line:
             self.line.render()
