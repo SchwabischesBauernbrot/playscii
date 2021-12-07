@@ -55,8 +55,8 @@ def get_tiles_along_line(x0, y0, x1, y1):
     """
     Return list of (x,y) tuples for all tiles crossing given worldspace
     line points.
-    NOTE: this implementation assumes square tiles!
     from http://playtechs.blogspot.com/2007/03/raytracing-on-grid.html
+    NOTE: this implementation assumes square tiles!
     """
     dx, dy = abs(x1 - x0), abs(y1 - y0)
     x, y = math.floor(x0), math.floor(y0)
@@ -95,11 +95,16 @@ def get_tiles_along_line(x0, y0, x1, y1):
         n -= 1
     return tiles
 
-def get_tiles_along_integer_line(x0, y0, x1, y1):
-    "simplified version of get_tiles_along_line using only integer math"
+def get_tiles_along_integer_line(x0, y0, x1, y1, cut_corners=True):
+    """
+    simplified version of get_tiles_along_line using only integer math,
+    also from http://playtechs.blogspot.com/2007/03/raytracing-on-grid.html
+    
+    cut_corners=True: when a 45 degree line is only intersecting the corners
+    of two tiles, don't count them as overlapped.
+    """
     dx, dy = abs(x1 - x0), abs(y1 - y0)
-    x = x0
-    y = y0
+    x, y = x0, y0
     n = 1 + dx + dy
     x_inc = 1 if x1 > x0 else -1
     y_inc = 1 if y1 > y0 else -1
@@ -109,7 +114,12 @@ def get_tiles_along_integer_line(x0, y0, x1, y1):
     tiles = []
     while n > 0:
         tiles.append((x, y))
-        if error > 0:
+        if error == 0 and cut_corners:
+            x += x_inc
+            y += y_inc
+            # count this iteration as two
+            n -= 1
+        elif error > 0:
             x += x_inc
             error -= dy
         else:
