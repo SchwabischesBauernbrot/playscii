@@ -2,15 +2,14 @@
 from ui_element import UIElement
 from ui_button import UIButton
 
-from cursor import Cursor
-
 from renderable_sprite import UISpriteRenderable
 from renderable_line import ToolSelectionBoxRenderable
 
 
 class ToolBar(UIElement):
     
-    tile_width, tile_height = 4, 1
+    tile_width, tile_height = 4, 1 # real size will be set based on buttons
+    icon_scale_factor = 4
     snap_left = True
     
     def __init__(self, ui):
@@ -81,15 +80,14 @@ class ArtToolBar(ToolBar):
             self.icon_renderables.append(sprite)
     
     def reset_button_icons(self):
-        scale_factor = Cursor.icon_scale_factor
         button_height = self.art.quad_height * ToolBarButton.height
         for i,icon in enumerate(self.icon_renderables):
             # scale: same screen size as cursor icon
             scale_x = icon.texture.width / self.ui.app.window_width
-            scale_x *= scale_factor * self.ui.scale
+            scale_x *= self.icon_scale_factor * self.ui.scale
             icon.scale_x = scale_x
             scale_y = icon.texture.height / self.ui.app.window_height
-            scale_y *= scale_factor * self.ui.scale
+            scale_y *= self.icon_scale_factor * self.ui.scale
             icon.scale_y = scale_y
             # position
             # remember that in renderable space, (0, 0) = center of screen
