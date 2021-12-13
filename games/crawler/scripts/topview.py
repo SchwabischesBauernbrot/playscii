@@ -51,7 +51,7 @@ class CrawlTopDownView(GameObject):
     # world to tile: self.get_tile_at_point(world_x, world_y)
     # tile to world: self.get_tile_loc(tile_x, tile_y)
     
-    def get_visible_tiles(self, x, y, dir_x, dir_y, tile_range):
+    def get_visible_tiles(self, x, y, dir_x, dir_y, tile_range, see_thru_walls=False):
         "return tiles visible from given point facing given direction"
         # NOTE: all the calculations here are done in this object's art's tile
         # coordinates, not world space. so -Y is up/north, -X is left/west.
@@ -86,9 +86,7 @@ class CrawlTopDownView(GameObject):
                 # whether this tile is solid or not, we have seen it
                 if not tile in tiles:
                     tiles.append((tile_x, tile_y))
-                if self.is_tile_solid(*tile) \
-                   and False: # DEBUG: show all tiles in frustum
-                    # since this tile is solid, go no further
+                if not see_thru_walls and self.is_tile_solid(*tile):
                     break
             scan_distance += 1
         return tiles
@@ -103,7 +101,8 @@ class CrawlTopDownView(GameObject):
         px, py = self.get_tile_at_point(p.x, p.y)
         self.player_visible_tiles = self.get_visible_tiles(px, py,
                                                            *p.direction,
-                                                           p.view_range_tiles)
+                                                           p.view_range_tiles,
+                                                           see_thru_walls=False)
         #print(self.player_visible_tiles)
         # color currently visible tiles
         for tile in self.player_visible_tiles:

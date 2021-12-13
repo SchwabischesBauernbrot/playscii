@@ -5,9 +5,9 @@
    "bg_color_b": 0,
    "bg_color_g": 0,
    "bg_color_r": 0,
-   "camera_x": -3.8770708822182267,
-   "camera_y": 37.19082680074619,
-   "camera_z": 7.346710425806212,
+   "camera_x": -2.6214004608647863,
+   "camera_y": 2.427993948091052,
+   "camera_z": 14.94938506263711,
    "class_name": "WorldPropertiesObject",
    "collision_enabled": true,
    "draw_debug_objects": true,
@@ -50,7 +50,7 @@
    "animating": false,
    "art_off_pct_x": 0,
    "art_off_pct_y": 0,
-   "art_src": "maze2",
+   "art_src": "maze1",
    "class_name": "CrawlTopDownView",
    "facing": 2,
    "locked": false,
@@ -63,25 +63,6 @@
    "y": 12.0,
    "y_sort": false,
    "z": 0.0
-  },
-  {
-   "alpha": 1.0,
-   "animating": false,
-   "art_off_pct_x": 0.0,
-   "art_off_pct_y": 0.0,
-   "art_src": "LineTester_7fb0899598e0_art",
-   "class_name": "LineTester",
-   "facing": 2,
-   "locked": false,
-   "name": "LineTester_7fb0899598e0",
-   "scale_x": 1.0,
-   "scale_y": 1.0,
-   "state": "stand",
-   "visible": true,
-   "x": -17.0,
-   "y": 56.0,
-   "y_sort": false,
-   "z": -0.01
   }
  ]
 }

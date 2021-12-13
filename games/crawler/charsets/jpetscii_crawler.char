@@ -1,0 +1,24 @@
+// JPETSCII variant with added characters for the crawler game
+jpetscii_crawler.png
+16, 20
+ ABCDEFGHIJKLMNO
+PQRSTUVWXYZ[]{} 
+"abcdefghijklmno
+pqrstuvwxyz     
+1234567890-=_+:;
+!@#$%^&*()</>,.?
+                
+                
+                
+                
+                
+                
+                
+                
+                
+   `'           
+                
+                
+                
+                
+// end
