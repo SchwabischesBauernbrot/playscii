@@ -68,7 +68,7 @@ class Cursor:
     vert_shader_source = 'cursor_v.glsl'
     frag_shader_source = 'cursor_f.glsl'
     alpha = 1
-    icon_scale_factor = 7 # 3.5 = 1:1
+    icon_scale_factor = 4
     logg = False
     
     def __init__(self, app):
@@ -356,10 +356,10 @@ class Cursor:
         # scale same regardless of screen resolution
         aspect = self.app.window_height / self.app.window_width
         scale_x = self.tool_sprite.texture.width / self.app.window_width
-        scale_x *= aspect * self.icon_scale_factor * self.app.ui.scale
+        scale_x *= self.icon_scale_factor * self.app.ui.scale
         self.tool_sprite.scale_x = scale_x
         scale_y = self.tool_sprite.texture.height / self.app.window_height
-        scale_y *= aspect * self.icon_scale_factor * self.app.ui.scale
+        scale_y *= self.icon_scale_factor * self.app.ui.scale
         self.tool_sprite.scale_y = scale_y
         # top left of icon at bottom right of cursor
         size = ui.selected_tool.brush_size or 1

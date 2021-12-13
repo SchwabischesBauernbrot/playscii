@@ -82,24 +82,23 @@ class ArtToolBar(ToolBar):
     
     def reset_button_icons(self):
         scale_factor = Cursor.icon_scale_factor
-        aspect = self.ui.app.window_height / self.ui.app.window_width
         button_height = self.art.quad_height * ToolBarButton.height
         for i,icon in enumerate(self.icon_renderables):
             # scale: same screen size as cursor icon
             scale_x = icon.texture.width / self.ui.app.window_width
-            scale_x *= aspect * scale_factor * self.ui.scale
+            scale_x *= scale_factor * self.ui.scale
             icon.scale_x = scale_x
             scale_y = icon.texture.height / self.ui.app.window_height
-            scale_y *= aspect * scale_factor * self.ui.scale
+            scale_y *= scale_factor * self.ui.scale
             icon.scale_y = scale_y
             # position
             # remember that in renderable space, (0, 0) = center of screen
             icon.x = self.x
-            icon.x += (icon.scale_x / 4) * aspect # pad a little
+            icon.x += (icon.scale_x / 8)
             icon.y = self.y
             icon.y -= button_height * i
             icon.y -= icon.scale_y
-            icon.y -= (icon.scale_y / 8) * aspect
+            icon.y -= (icon.scale_y / 8)
     
     def update_selection_box(self):
         # scale and position box around currently selected tool
