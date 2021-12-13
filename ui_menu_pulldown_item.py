@@ -178,6 +178,12 @@ class ToolSwapSelectedColors(ArtModePulldownMenuItem):
     label = 'Swap selected fg/bg colors'
     command = 'swap_fg_bg_colors'
 
+class ToolToggleArtToolbar(ArtModePulldownMenuItem):
+    label = '  Show toolbar'
+    command = 'toggle_art_toolbar'
+    def should_mark(ui):
+        return ui.art_toolbar.visible
+
 class ToolPaintItem(ArtModePulldownMenuItem):
     # two spaces in front of each label to leave room for mark
     label = '  %s' % PencilTool.button_caption
@@ -617,7 +623,7 @@ class EditMenuData(PulldownMenuData):
 
 class ToolMenuData(PulldownMenuData):
     items = [ToolTogglePickerItem, ToolTogglePickerHoldItem,
-             ToolSwapSelectedColors, SeparatorItem,
+             ToolSwapSelectedColors, ToolToggleArtToolbar, SeparatorItem,
              ToolPaintItem, ToolEraseItem, ToolRotateItem, ToolGrabItem,
              ToolTextItem, ToolSelectItem, ToolPasteItem, SeparatorItem,
              ToolIncreaseBrushSizeItem, ToolDecreaseBrushSizeItem,
@@ -628,6 +634,8 @@ class ToolMenuData(PulldownMenuData):
     def should_mark_item(item, ui):
         # if it's a tool setting toggle, use its own mark check function
         if item.__bases__[0] is ToolSettingsItem:
+            return item.should_mark(ui)
+        elif hasattr(item, 'should_mark'): # toolbar toggle, etc
             return item.should_mark(ui)
         return item.label == '  %s' % ui.selected_tool.button_caption
 

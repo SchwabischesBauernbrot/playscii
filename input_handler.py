@@ -526,6 +526,10 @@ class InputLord:
     def BIND_select_select_tool(self):
         self.ui.set_selected_tool(self.ui.select_tool)
     
+    def BIND_toggle_art_toolbar(self):
+        self.ui.art_toolbar.visible = not self.ui.art_toolbar.visible
+        self.ui.menu_bar.refresh_active_menu()
+    
     def BIND_cut_selection(self):
         self.ui.cut_selection()
         # switch to PasteTool

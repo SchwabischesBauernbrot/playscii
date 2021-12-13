@@ -14,6 +14,7 @@ from ui_edit_panel import EditListPanel
 from ui_object_panel import EditObjectPanel
 from ui_colors import UIColors
 from ui_tool import PencilTool, EraseTool, GrabTool, RotateTool, TextTool, SelectTool, PasteTool
+from ui_toolbar import ArtToolBar
 from art import UV_NORMAL, UV_ROTATE90, UV_ROTATE180, UV_ROTATE270, UV_FLIPX, UV_FLIPY, UV_FLIP90, UV_FLIP270, uv_names
 from edit_command import EditCommand, EditCommandTile, EntireArtCommand
 
@@ -118,6 +119,7 @@ class UI:
         self.art_menu_bar = ArtMenuBar(self)
         self.game_menu_bar = GameMenuBar(self)
         self.menu_bar = self.art_menu_bar
+        self.art_toolbar = ArtToolBar(self)
         self.edit_list_panel = EditListPanel(self)
         self.edit_object_panel = EditObjectPanel(self)
         self.game_selection_label = GameSelectionLabel(self)
@@ -125,6 +127,7 @@ class UI:
         self.elements += [self.fps_counter, self.status_bar, self.popup,
                           self.message_line, self.debug_text, self.pulldown,
                           self.art_menu_bar, self.game_menu_bar, self.tooltip,
+                          self.art_toolbar,
                           self.edit_list_panel, self.edit_object_panel,
                           self.game_hover_label, self.game_selection_label]
         # add console last so it draws last

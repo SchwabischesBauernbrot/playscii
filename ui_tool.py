@@ -346,6 +346,7 @@ class SelectTool(UITool):
     brush_size = None
     affects_masks = False
     show_preview = False
+    icon_filename = 'tool_select_add.png' # used only for toolbar
     icon_filename_normal = 'tool_select.png'
     icon_filename_add = 'tool_select_add.png'
     icon_filename_sub = 'tool_select_sub.png'

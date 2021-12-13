@@ -229,6 +229,16 @@ class SwatchSelectionBoxRenderable(LineRenderable):
         self.vert_array, self.elem_array, self.color_array = get_box_arrays(None, self.color)
 
 
+class ToolSelectionBoxRenderable(LineRenderable):
+    line_width = 2
+    
+    def get_color(self):
+        return (1.0, 1.0, 1.0, 1.0)
+    
+    def build_geo(self):
+        self.vert_array, self.elem_array, self.color_array = get_box_arrays(None)
+
+
 class WorldLineRenderable(LineRenderable):
     "any LineRenderable that draws in world, ie in 3D perspective"
     def get_projection_matrix(self):

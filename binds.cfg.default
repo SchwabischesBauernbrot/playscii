@@ -170,5 +170,6 @@ self.edit_bind_src = {
     '_edit_cfg': 'edit_cfg',
     '_select_overlay_image': 'select_overlay_image',
     '_set_overlay_image_opacity': 'set_overlay_image_opacity',
-    '_set_overlay_image_scaling': 'set_overlay_image_scaling'
+    '_set_overlay_image_scaling': 'set_overlay_image_scaling',
+    '_toggle_art_toolbar': 'toggle_art_toolbar'
 }
