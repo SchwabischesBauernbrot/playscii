@@ -59,6 +59,17 @@ class ToolBar(UIElement):
 class ToolBarButton(UIButton):
     width, height = 4, 2
     caption = ''
+    tooltip_on_hover = True
+    
+    def get_tooltip_text(self):
+        return self.cb_arg.button_caption
+    
+    def get_tooltip_location(self):
+        x = self.width
+        window_height_chars = self.element.ui.app.window_height / (self.element.ui.charset.char_height * self.element.ui.scale)
+        cursor_y = self.element.ui.app.mouse_y / self.element.ui.app.window_height
+        y = int(cursor_y * window_height_chars)
+        return x, y
 
 
 class ArtToolBar(ToolBar):
@@ -70,7 +81,8 @@ class ArtToolBar(ToolBar):
             button.x = 0
             button.y = i * button.height
             # alternate colors
-            button.normal_bg_color = self.ui.colors.lightgrey if i % 2 == 0 else self.ui.colors.medgrey
+            button.normal_bg_color = self.ui.colors.white if i % 2 == 0 else self.ui.colors.lightgrey
+            button.hovered_bg_color = self.ui.colors.medgrey
             # callback: tell ui to set this tool as selected
             button.callback = self.ui.set_selected_tool
             button.cb_arg = tool
