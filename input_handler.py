@@ -971,6 +971,9 @@ class InputLord:
     
     def BIND_delete_frame(self):
         self.ui.active_art.delete_frame_at(self.ui.active_art.active_frame)
+        # if we're now down to 1 frame, refresh to dim this item!
+        # FIXME: this doesn't dim it - why? - but it is unselectable
+        self.ui.menu_bar.refresh_active_menu()
     
     def BIND_change_frame_index(self):
         self.ui.open_dialog(FrameIndexDialog)
