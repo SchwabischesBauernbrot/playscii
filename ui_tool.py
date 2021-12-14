@@ -308,7 +308,7 @@ class TextTool(UITool):
         # ignore any other non-character keys
         if len(keystr) > 1:
             return
-        if keystr.isalpha() and not shift_pressed:
+        if keystr.isalpha() and not shift_pressed and not self.ui.app.il.capslock_on:
             keystr = keystr.lower()
         elif not keystr.isalpha() and shift_pressed:
             keystr = SHIFT_MAP.get(keystr, ' ')

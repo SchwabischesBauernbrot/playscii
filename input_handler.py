@@ -203,6 +203,10 @@ class InputLord:
             self.alt_pressed = True
         if ks[sdl2.SDL_SCANCODE_LCTRL] or ks[sdl2.SDL_SCANCODE_RCTRL]:
             self.ctrl_pressed = True
+        # check and remember capslock as a special mod state
+        # (currently only used for text tool entry)
+        ms = sdl2.SDL_GetModState()
+        self.capslock_on = bool(ms & sdl2.KMOD_CAPS)
         # macOS: treat command as interchangeable with control, is this kosher?
         if platform.system() == 'Darwin' and (ks[sdl2.SDL_SCANCODE_LGUI] or ks[sdl2.SDL_SCANCODE_RGUI]):
             self.ctrl_pressed = True
