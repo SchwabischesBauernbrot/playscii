@@ -308,6 +308,12 @@ class TextTool(UITool):
         # ignore any other non-character keys
         if len(keystr) > 1:
             return
+        # respect capslock
+        # NOTE: if user has their OS rebind capslock to something else, SDL2
+        # will still track its state as a toggle. which means sometimes these
+        # users will try to do text entry here and be surprised to see all caps.
+        # if this becomes an issue, maybe offer a cfg setting to always ignore
+        # capslock? since it's kind of a power user thing anyway.
         if keystr.isalpha() and not shift_pressed and not self.ui.app.il.capslock_on:
             keystr = keystr.lower()
         elif not keystr.isalpha() and shift_pressed:
