@@ -810,6 +810,9 @@ class Art:
         # write thumbnail
         new_thumb_filename = thumb_dir + self.app.get_file_hash(self.filename) + '.png'
         write_thumbnail(self.app, self.filename, new_thumb_filename)
+        # thumbnail write process actually sets active frame! set it back
+        for r in self.renderables:
+            r.set_frame(self.active_frame)
     
     def ALT_save_to_file(self):
         # TEST alt save format research
