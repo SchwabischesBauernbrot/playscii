@@ -223,7 +223,7 @@ class Art:
     def duplicate_frame(self, src_frame_index, dest_frame_index=None, delay=None):
         "Create a duplicate of given frame at given index."
         # stick new frame at end if no destination index given
-        dest_frame_index = dest_frame_index or self.frames
+        dest_frame_index = dest_frame_index if dest_frame_index is not None else self.frames
         # copy source frame's delay if none given
         delay = delay or self.frame_delays[src_frame_index]
         self.frames += 1
