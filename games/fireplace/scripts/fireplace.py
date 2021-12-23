@@ -10,7 +10,7 @@ expensive compared to many old demoscene fire tricks. But it's easy to think abo
 and tune, which was the right call for a one-day exercise :]
 """
 
-import webbrowser
+import os, webbrowser
 from random import random, randint, choice
 
 from game_object import GameObject
@@ -27,8 +27,7 @@ TARGET_PARTICLES_DEFAULT = 100
 SPAWN_MARGIN_X = 8
 # each particle's character "decays" towards 0 in random jumps
 CHAR_DECAY_RATE_MAX = 16
-# music is just an OGG file, modders feel free to provide your own
-PLAY_MUSIC = False
+# music is just an OGG file, modders feel free to provide your own in sounds/
 MUSIC_FILENAME = 'music.ogg'
 MUSIC_URL = 'http://brotherandroid.com'
 # random ranges for time in seconds til next message pops up
@@ -77,15 +76,20 @@ class Fireplace(GameObject):
         self.help_screen.set_scale(0.75, 0.75, 1)
         # start with help screen up, uncomment to hide on start
         #self.help_screen.visible = False
-        # don't bother creating credit screen if !PLAY_MUSIC
+        # don't bother creating credit screen if no music present
         self.credit_screen = None
-        if PLAY_MUSIC:
+        self.music_exists = False
+        if os.path.exists(self.world.sounds_dir + MUSIC_FILENAME):
+            self.app.log('%s found in %s' % (MUSIC_FILENAME, self.world.sounds_dir))
             self.world.play_music(MUSIC_FILENAME)
             self.music_paused = False
+            self.music_exists = True
             # music credit screen, click for link to artist's website
             self.credit_screen = self.world.spawn_object_of_class("CreditScreen", 0, -6)
             self.credit_screen.z = 1.1
             self.credit_screen.set_scale(0.75, 0.75, 1)
+        else:
+            self.app.log('No %s found in %s' % (MUSIC_FILENAME, self.world.sounds_dir))
         self.set_new_message_time()
     
     def update(self):
@@ -170,7 +174,7 @@ class Fireplace(GameObject):
             self.help_screen.visible = not self.help_screen.visible
             if self.credit_screen:
                 self.credit_screen.visible = not self.credit_screen.visible
-        elif key == 'm' and PLAY_MUSIC:
+        elif key == 'm' and self.music_exists:
             if self.music_paused:
                 self.world.resume_music()
                 self.music_paused = False
