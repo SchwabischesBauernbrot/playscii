@@ -98,6 +98,9 @@ class Application:
     # (UI becomes hard to use below 640 x 480, but allow it in case user is
     # doing something weird or reshuffling their desktop)
     min_window_width, min_window_height = 320, 240
+    # if True, use the older method of creating a test window to determine
+    # desktop resolution - used to be needed on Linux, but maybe no longer.
+    create_test_window = False
     fullscreen = False
     # framerate: uncapped if -1
     framerate = 30
@@ -171,6 +174,10 @@ class Application:
         # set ui None so other objects can check it None, eg load_art check
         # for its active art on later runs (audiolord too)
         self.ui, self.al = None, None
+        # TODO prefer wayland, once SDL releases support for this hint
+        #if platform.system() == 'Linux':
+        #    sdl2.SDL_SetHint(sdl2.SDL_HINT_VIDEODRIVER, 'wayland, x11')
+        # http://wiki.libsdl.org/SDL_SetHint
         sdl2.ext.init()
         winpos = sdl2.SDL_WINDOWPOS_UNDEFINED
         screen_width, screen_height = self.get_desktop_resolution()
@@ -394,12 +401,18 @@ class Application:
     
     def get_desktop_resolution(self):
         winpos = sdl2.SDL_WINDOWPOS_UNDEFINED
-        # SDL2 win/mac behavior differs, won't create window at desktop res :[
-        create_test_window = platform.system() not in ['Windows', 'Darwin']
-        if not create_test_window:
+        # use the more direct way of getting desktop resolution
+        if not self.create_test_window:
             desktop = sdl2.video.SDL_DisplayMode()
             sdl2.SDL_GetDesktopDisplayMode(0, desktop)
             return desktop.w, desktop.h
+        # alt, probably less good method of doing the above:
+        #r = sdl2.SDL_Rect()
+        #sdl2.SDL_GetDisplayBounds(0, r)
+        #screen_width, screen_height = r.w, r.h
+        
+        # this method seems to have broken recently (2022-06) on our Linux +
+        # Nvidia + X11 + SDL2.20 setup; default it off but keep it around...
         test_window = sdl2.SDL_CreateWindow(bytes(APP_NAME, 'utf-8'),
                                             winpos, winpos,
                                             128, 128,
@@ -429,7 +442,7 @@ class Application:
         # TODO: this doesn't seem to work in Ubuntu, what am i missing?
         img = Image.open(LOGO_FILENAME).convert('RGBA')
         # does icon need to be a specific size?
-        img = img.resize((32, 32), Image.ANTIALIAS)
+        img = img.resize((32, 32), Image.Resampling.LANCZOS)
         w, h = img.size
         depth, pitch = 32, w * 4
         #SDL_CreateRGBSurfaceFrom((pixels, width, height, depth, pitch, Rmask, Gmask, Bmask, Amask)
