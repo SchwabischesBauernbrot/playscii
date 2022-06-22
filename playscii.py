@@ -406,11 +406,6 @@ class Application:
             desktop = sdl2.video.SDL_DisplayMode()
             sdl2.SDL_GetDesktopDisplayMode(0, desktop)
             return desktop.w, desktop.h
-        # alt, probably less good method of doing the above:
-        #r = sdl2.SDL_Rect()
-        #sdl2.SDL_GetDisplayBounds(0, r)
-        #screen_width, screen_height = r.w, r.h
-        
         # this method seems to have broken recently (2022-06) on our Linux +
         # Nvidia + X11 + SDL2.20 setup; default it off but keep it around...
         test_window = sdl2.SDL_CreateWindow(bytes(APP_NAME, 'utf-8'),
